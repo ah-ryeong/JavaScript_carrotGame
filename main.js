@@ -30,11 +30,15 @@ gameBtn.addEventListener('click', () => {
     } else {
         startGame();
     }
-
-    started = !started;
 });
 
+popUpRefresh.addEventListener('click', ()=>{
+    startGame();
+    hidePopUp();
+})
+
 function startGame() {
+    started = true;
     initGame();
     showStopButton();
     showTimerAndScore();
@@ -42,13 +46,20 @@ function startGame() {
 }
 
 function stopGame() {
+    started = false;
     stopGameTimer();
     hideGameButton();
     showPopUpWithText('REPLAY?');
 }
 
+function finishGame(win) {
+    started = false;
+    hideGameButton();
+    showPopUpWithText(win? 'YOU WON' : 'YOU LOST');
+}
+
 function showStopButton() {
-    const icon = gameBtn.querySelector('.fa-play');
+    const icon = gameBtn.querySelector('.fas');
     icon.classList.add('fa-stop');
     icon.classList.remove('fa-play');
 }
@@ -93,6 +104,10 @@ function showPopUpWithText(text) {
     popUp.classList.remove('pop-up--hide');
 }
 
+function hidePopUp() {
+    popUp.classList.add('pop-up--hide');
+}
+
 function initGame() {
     field.innerHTML = '';
 
@@ -125,12 +140,6 @@ function onFieldClick(event) {
         stopGameTimer();
         finishGame(false);
     }
-}
-
-function finishGame(win) {
-    started = false;
-    hideGameButton();
-    showPopUpWithText(win? 'YOU WON' : 'YOU LOST');
 }
 
 function updateScoreBoard() {
