@@ -20,6 +20,8 @@ let score = 0;
 let timer = undefined;
 
 
+field.addEventListener('click', onFieldClick)
+
 gameBtn.addEventListener('click', () => {
     // console.log('log');
 
@@ -67,6 +69,7 @@ function startGameTimer() {
     timer = setInterval(() => {
         if(remainingTimeSec <= 0) {
             clearInterval(timer);
+            finishGame(CARROT_COUNT === score);
 
             return;
         }
@@ -98,6 +101,40 @@ function initGame() {
     // console.log(fieldRect);
     addItem('carrot', CARROT_COUNT, 'img/carrot.png');
     addItem('bug', BUG_COUNT, 'img/bug.png');
+}
+
+function onFieldClick(event) {
+    if(!started) {
+        return;
+    }
+
+    // console.log(event);
+    const target = event.target;
+    if(target.matches('.carrot')) {
+        // 당근
+        target.remove();
+        score ++;
+        updateScoreBoard();
+
+        if(score === CARROT_COUNT) {
+            finishGame(true);
+        }
+
+    } else if(target.matches('.bug')){
+        // 벌레
+        stopGameTimer();
+        finishGame(false);
+    }
+}
+
+function finishGame(win) {
+    started = false;
+    hideGameButton();
+    showPopUpWithText(win? 'YOU WON' : 'YOU LOST');
+}
+
+function updateScoreBoard() {
+    gameScore.innerText = CARROT_COUNT - score;
 }
 
 function addItem(className, count, imgPath) {
