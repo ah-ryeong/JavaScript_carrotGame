@@ -70,6 +70,7 @@ function finishGame(win) {
         playSound(bugSound);
     }
 
+    stopGameTimer();
     stopSound(bgSound);
     showPopUpWithText(win? 'YOU WON' : 'YOU LOST');
 }
@@ -125,6 +126,7 @@ function hidePopUp() {
 }
 
 function initGame() {
+    score = 0;
     field.innerHTML = '';
 
     gameScore.innerText = CARROT_COUNT;
@@ -154,7 +156,6 @@ function onFieldClick(event) {
 
     } else if(target.matches('.bug')){
         // 벌레
-        stopGameTimer();
         finishGame(false);
     }
 }
